@@ -6,8 +6,15 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Animator animator;
+    public int HP { get; set; }
 
     private bool isWalking;
+
+    public Player()
+    {
+        HP = 100;
+    }
 
     private void Update()
     {
@@ -18,38 +25,28 @@ public class Player : MonoBehaviour
             ThrowProjectile();
         }
 
+        if(HP <= 0)
+        {
+            gameObject.SetActive(false); 
+        }
+
     }
 
     private void Move()
     {
-        Vector2 inputVector = new Vector2(0, 0);
+        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
+        Vector3 pos = new Vector3(h, 0, v);
 
-        if (Input.GetKey(KeyCode.W))
+        isWalking = pos.magnitude > 0;
+        
+        if(isWalking)
         {
-            inputVector.y += 1;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            inputVector.x -= 1;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            inputVector.y -= 1;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            inputVector.x += 1;
+            animator.transform.forward = pos;
         }
 
-        inputVector = inputVector.normalized;
+        transform.Translate(pos * moveSpeed * Time.deltaTime);
 
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
-
-        isWalking = moveDir != Vector3.zero;
-
-        float rotateSpeed = 10f;
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
 
     public bool IsWalking()
@@ -68,7 +65,7 @@ public class Player : MonoBehaviour
             targetPoint += transform.up * 1f;
 
             // 플레이어의 전방 벡터를 기준으로 위치 계산 (z축으로 2f만큼 떨어진 위치)
-            Vector3 throwPosition = transform.position + transform.forward;
+            Vector3 throwPosition = transform.position;
             throwPosition += transform.up * 1f;
 
             Vector3 throwDirection = (targetPoint - throwPosition).normalized;
@@ -77,6 +74,5 @@ public class Player : MonoBehaviour
             projectile.GetComponent<Rigidbody>().velocity = throwDirection * Projectile.projectileSpeed;
         }
     }
-
 
 }

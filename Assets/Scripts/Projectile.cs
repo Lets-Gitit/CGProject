@@ -6,10 +6,11 @@ public class Projectile : MonoBehaviour
 {
     public static float projectileSpeed { get; private set; }
 
-    private void Start()
+    public Projectile()
     {
         projectileSpeed = 10f;
     }
+
 
     // Update is called once per frame
     private void Update()
