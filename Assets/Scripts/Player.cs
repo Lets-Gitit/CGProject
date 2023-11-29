@@ -64,7 +64,6 @@ public class Player : MonoBehaviour
             Vector3 targetPoint = hit.point;
             targetPoint += transform.up * 1f;
 
-            // 플레이어의 전방 벡터를 기준으로 위치 계산 (z축으로 2f만큼 떨어진 위치)
             Vector3 throwPosition = transform.position;
             throwPosition += transform.up * 1f;
 

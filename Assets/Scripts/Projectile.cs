@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public static float projectileSpeed { get; private set; }
+    public static float projectileSpeed;
 
     public Projectile()
     {
-        projectileSpeed = 10f;
+        projectileSpeed = 20f;
     }
-
 
     // Update is called once per frame
     private void Update()
