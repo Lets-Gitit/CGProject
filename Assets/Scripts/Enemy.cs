@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 15f;
-    private int PlayerDamage = 50;
+    private int PlayerDamage = 1;
 
     private GameObject player;
     private Rigidbody enemyRigidbody;
@@ -35,6 +35,7 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.CompareTag(PLAYER))
         {
             Player instance = other.GetComponent<Player>();
@@ -44,7 +45,8 @@ public class Enemy : MonoBehaviour
 
         if (other.gameObject.CompareTag(PROJECTILE))
         {
-            Debug.Log("투사체");
+            Player instance = player.GetComponent<Player>();
+            Debug.Log($"점수 : {++instance.Score}");
             Destroy(other.gameObject);
             Destroy(gameObject);
         }

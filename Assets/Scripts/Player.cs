@@ -8,12 +8,13 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private Animator animator;
     public int HP { get; set; }
-
+    public int Score { get; set; }
     private bool isWalking;
-
+    
     public Player()
     {
-        HP = 100;
+        HP = 3;
+        Score = 0;
     }
 
     private void Update()
@@ -58,8 +59,9 @@ public class Player : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
+        int layerMask = LayerMask.GetMask("floor");
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 100f, layerMask)) 
         {
             Vector3 targetPoint = hit.point;
             targetPoint += transform.up * 1f;
@@ -68,6 +70,8 @@ public class Player : MonoBehaviour
             throwPosition += transform.up * 1f;
 
             Vector3 throwDirection = (targetPoint - throwPosition).normalized;
+
+            animator.transform.forward = throwDirection;
 
             GameObject projectile = Instantiate(projectilePrefab, throwPosition, Quaternion.identity);
             projectile.GetComponent<Rigidbody>().velocity = throwDirection * Projectile.projectileSpeed;
